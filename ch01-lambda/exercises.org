@@ -1,0 +1,110 @@
+#+TITLE: Lambda Calculus Exercises
+#+AUTHOR: Jesse Evers
+
+* Equivalence Exercises
+
+Choose an answer that is equivalent to the listed lambda term.
+
+1. \lambda{}xy.xz
+   b) \lambda{}mn.mz is equivalent, because /x/ was just replaced with /m/, and /y/ with /n/.
+2. \lambda{}xy.xxy
+   c) \lambda{}a.(\lambda{}b.aab) is equivalent. \lambda{}xy.xxy becomes \lambda{}x.(\lambda{}y.xxy), and if you change /x/ to /b/ and /y/ to /a/, you arrive at \lambda{}a.(\lambda{}b.aab).
+3. \lambda{}xyz.zx
+   b) \lambda{}tos.st, by mapping /x/ \rightarrow /t/, /y/ \rarr /o/, and /z/ \rarr /s/.
+
+
+* Chapter Exercises
+
+** Combinators
+
+1. \lambda{}x.xxx is a combinator, because it only binds /x/ and /x/ is the only variable in the body of the lambda.
+2. \lambda{}xy.zx is not a combinator, because /z/ is a free variable.
+3. \lambda{}xyz.xy(zx) is a combinator, because /x/, /y/, and /z/ are the only body variables and they are all bound.
+4. \lambda{}xyz.xy(zxy) is a combinator, because all variables are bound.
+5. \lambda{}xy.xy(zxy) is not a combinator, because /z/ is a free variable.
+
+** Normal form or diverge?
+
+1. \lambda{}x.xxx does not diverge, because it is reduced to its normal form.
+2. (\lambda{}z.zz)(\lambda{}y.yy) diverges, because applying it does the following:
+   \rarr ([z := (\lambda{}y.yy)]zz)
+   \rarr (\lambda{}y.yy)(\lambda{}y.yy)
+   \rarr ([y := (\lambda{}y.yy)]yy)
+   \rarr (\lambda{}y.yy)(\lambda{}y.yy)
+   \rarr etc...
+   It is /alpha equivalent/ to (\lambda{}x.xxx)(\lambda{}x.xxx).
+
+3. (\lambda{}x.xxx)z can be reduced to a normal form:
+   \rarr ([x := z]xxx)
+   \rarr zzz
+
+** Beta reduce
+
+1. (\lambda{}abc.cba)zz(\lambda{}wv.w)
+   \rarr (\lambda{}a.\lambda{}b.\lambda{}c.cba)zz(\lambda{}wv.w)
+   \rarr ([a := z](\lambda{}b.\lambda{}c.cba))
+   \rarr (\lambda{}b.\lambda{}c.cbz)z(\lambda{}wv.w)
+   \rarr ([b := z] (\lambda{}c.cbz))
+   \rarr (\lambda{}c.czz)(\lambda{}wv.w)
+   \rarr (\lambda{}c.czz)(\lambda{}w.\lambda{}v.w)
+   \rarr ([c := (\lambda{}w.\lambda{}v.w)] czz)
+   \rarr (\lambda{}w.\lambda{}v.w)zz
+   \rarr ([w := z] (\lambda{}v.w))
+   \rarr (\lambda{}v.z)z
+   \rarr ([v := z] z)
+   \rarr z
+
+2. (\lambda{}x.\lambda{}y.xyy)(\lambda{}a.a)b
+   \rarr ([x := (\lambda{}a.a)] (\lambda{}y.xyy)) \rarr \lambda{}y.(\lambda{}a.a)yy
+   \rarr (\lambda{}y.(\lambda{}a.a)yy)b
+   \rarr ([y := b] (\lambda{}a.a)yy) \rarr (\lambda{}a.a)bb
+   \rarr (\lambda{}a.a)bb
+   \rarr ([a := b] a) \rarr b
+   \rarr bb
+
+3. (\lambda{}y.y)(\lambda{}x.xx)(\lambda{}z.zq)
+   \rarr [y := \lambda{}x.xx]
+   \rarr (\lambda{}x.xx)(\lambda{}z.zq)
+   \rarr [x := \lambda{}z.zq]
+   \rarr (\lambda{}z.zq)(\lambda{}z.zq)
+   \rarr [z := \lambda{}z.zq]
+   \rarr (\lambda{}z.zq)q
+   \rarr [z := q]
+   \rarr qq
+
+4. (\lambda{}z.z)(\lambda{}z.zz)(\lambda{}z.zy)
+   \rarr [z := \lambda{}z.zz]
+   \rarr (\lambda{}z.zz)(\lambda{}z.zy)
+   \rarr [z := \lambda{}z.zy]
+   \rarr (\lambda{}z.zy)(\lambda{}z.zy)
+   \rarr [z := \lambda{}z.zy]
+   \rarr (\lambda{}z.zy)y
+   \rarr [z := y]
+   \rarr yy
+
+5. (\lambda{}x.\lambda{}y.xyy)(\lambda{}y.y)y
+   \rarr [x := \lambda{}y.y]
+   \rarr (\lambda{}y.(\lambda{}y.y)yy)y
+   \rarr [y := y]
+   \rarr (\lambda{}y.y)yy
+   \rarr [y := y]
+   \rarr yy
+
+6. (\lambda{}a.aa)(\lambda{}b.ba)c
+   \rarr [a := \lambda{}b.ba]
+   \rarr (\lambda{}b.ba)(\lambda{}b.ba)c
+   \rarr [b := \lambda{}b.ba]
+   \rarr (\lambda{}b.ba)(a)c
+   \rarr [b := a]
+   \rarr aac
+
+7. (\lambda{}xyz.xz(yz))(\lambda{}x.z)(\lambda{}x.a)
+   \rarr (\lambda{}x.\lambda{}y.\lambda{}z.xz(yz))(\lambda{}x.z_1)(\lambda{}x.a)
+   \rarr [x := \lambda{}x.z_1]
+   \rarr (\lambda{}y.\lambda{}z.(\lambda{}x.z_1)z(yz))(\lambda{}x.a)
+   \rarr [x := z]
+   \rarr (\lambda{}y.\lambda{}z.z_1(yz))(\lambda{}x.a)
+   \rarr [y := \lambda{}x.a]
+   \rarr \lambda{}z.z_1((\lambda{}x.a)z)
+   \rarr [x := z]
+   \rarr \lambda{}z.z_{1}a
