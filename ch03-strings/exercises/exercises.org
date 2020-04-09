@@ -1,0 +1,31 @@
+#+TITLE: Chapter 3
+#+AUTHOR: Jesse Evers
+
+* Scope
+
+1. Yes, =y= is in scope for =z= because =y= is defined in the global interpreter scope before =z= is defined.
+2. No, =h= is not in scope for =g= because it has not been defined.
+3. No. =d= is a parameter bound to =area=, so it is not defined outside of =area=. Also, =r= is not defined anywhere, so it is also out of scope.
+4. Yes, =r= and =d= are now both in scope for =area=, because =r= is locally defined in terms of the parameter =d=.
+
+* Syntax Errors
+
+1. =++ [1, 2, 3] [4, 5, 6]= will error because the =++= needs parens around it (since it's an infix operator by default).
+2. ='<3' ++ ' Haskell'= will error because single quotes are only used for single characters, not for strings. They need to be replaced with double quotes, and then it will compile.
+3. =concat ["<3", " Haskell"]= will compile.
+
+* Chapter Exercises
+** Reading syntax
+1. =concat [[1, 2, 3], [4, 5, 6]]= is correct syntax.
+2. =++ [1, 2, 3] [4, 5, 6]= is incorrect syntax, because =++= is an infix operator.
+3. =(++) "hello" " world"= is correct syntax. It fixes the problem from the previous exercise.
+4. =["hello" ++ " world]= is incorrect. It is missing a close quote after 'world'.
+5. =4 !! "hello"= is incorrect. The index should come /after/ the =!!= operator, not before.
+6. =(!!) "hello" 4= is correct syntax.
+7. =take "4 lovely"= is incorrect syntax. The 4 should be outside of the quotes.
+8. =take 3 "awesome"= is correct syntax.
+
+For the second set of problems, input (a) corresponds to output (d), input (b) to output (c), input (c) to output (e), (d) to (a), and (e) to (b).
+
+** Building functions
+See =./buildingfns.hs=.

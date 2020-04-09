@@ -1,0 +1,10 @@
+-- print2.hs
+module Print2 where
+
+main :: IO ()
+main = do
+  putStrLn "Count to four for for me:"
+  putStrLn "one, two"
+  putStrLn ", three and"
+  putStrLn " four!"
+
