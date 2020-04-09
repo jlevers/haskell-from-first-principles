@@ -1,0 +1,97 @@
+#+TITLE: Chapter 5
+#+AUTHOR: Jesse Evers
+
+* Type Matching
+1. =not= has type signature =Bool -> Bool= (c).
+2. =length= has type signature =[a] -> Int= (d).
+3. =concat= has type signature =[\[a]] -> [a]= (b). Backslash in signature to prevent org from turning it into a link.
+4. =head= has type signature =[a] -> a= (a).
+5. =(<)= has type signature =Ord a => a -> a -> Bool= (e).
+
+* Type Arguments
+1. If =f :: a -> a -> a -> a= and =x :: Char=, the type of =f x= is =Char -> Char -> Char= (a).
+2. If =g :: a -> b -> c -> b=, the type of =g 0 'c' "woot"= is =Char= (d).
+3. If =h :: (Num a, Num b) => a -> b -> b=, the type of =h 1.0 2= is =Num b => b= (d).
+4. If =h :: (Num a, Num b) => a -> b -> b=, the type of =h 1 (5.5 :: Double)= is =Double= (c).
+5. If =jackal :: (Ord a, Eq b) => a -> b -> a=, the type of =jackal "keyboard" "has the word jackal in it"= is =[Char]= (a).
+6. If =jackal :: (Ord a, Eq b) => a -> b -> a=, the type of =jackal "keyboard"= is =Eq b => b-> [Char]= (e).
+7. If =kessel :: (Ord a, Num b) => a -> b -> a=, the type of =kessel 1 2= is =Ord a => a= (e).
+
+   Wrong. The correct answer is =(Num a, Ord a) => a=. This is because we know that the first argument has to have an instance of typeclass =Ord=. We apply the function to the argument =1=, which has an instance of =Ord= /and/ an instance of =Num=. Since the return type of the overall function is the same as that of the first argument, the return type now is constrained by both =Ord= and =Num=, since =1= has an instance of both of those. After applying the second argument, the =b= goes away altogether, and so the return type is that of the first argument: =(Num a, Ord a) => a=.
+8. If =kessel :: (Ord a, Num b) => a -> b -> a=, the type of =kessel 1 (2 :: Integer)= is =Ord a => a= (e).
+
+   Wrong, for similar reasons as the above. The type of =b= (now =Integer=) doesn't affect the outcome of the function, since after the second application, it drops out entirely. The first argument, =1=, is still constrained by both =Num= and =Ord=, so the return type is again =(Num a, Ord a) => a=.
+9. If =kessel :: (Ord a, Num b) => a -> b -> a=, the type of =kessel (1 :: Integer) 2= is =Integer= (c).
+
+* Parametricity
+1. I initially thought something like =f :: a -> a; f x = 3 * x= would accomplish exactly what the book said was impossible, but I now realize that multiplication constrains the output to having an instance of =Num=, making the signature =(Num a) => a -> a=.
+2. 
+   #+begin_src haskell
+   f1 :: a -> a -> a
+   f1 x y = x
+
+   f2 :: a -> a -> a
+   f2 x y = y
+   #+end_src
+3. Only one possible implementation:
+
+   #+begin_src haskell
+     f :: a -> b -> b
+     f x y = y
+   #+end_src
+
+   The behavior is always the same regardless of the types of =a= and =b=...unless we know ahead of time what the types will be so that we can determine which operations we can do on them that'll still produce the correct output type =b=.
+
+* Apply Yourself
+See =./applyYourself.hs=.
+
+* Chapter Exercises
+** Multiple choice
+1. (c)
+2. (a)
+3. (b)
+4. (c)
+
+** Determine the type
+See =./determineTheType.hs=.
+
+** Does it compile?
+See =./doesItCompile.hs=.
+
+** Type variable or specific type constructor?
+2. [@2] =zed= is fully polymorphic, and =Zed= and =Blah= are concrete.
+3. =a= is fully polymorphic, =b= is constrained polymorphic, and =c= is concrete.
+4. =f= and =g= are fully polymorphic, and =C= is concrete.
+
+** Write a type signature
+1. 
+  #+begin_src haskell
+  functionH :: [a] -> [a]
+  functionH (x:_) = x
+  #+end_src
+
+Wrong. I think this stemmed from a misunderstanding of the destructuring syntax. The correct type signature is =[a] -> a=.
+
+2.
+  #+begin_src haskell
+  functionC :: (Ord a, Ord b) => a -> b -> Bool
+  functionC x y = if (x > y) then True else False
+  #+end_src
+
+Wrong. =x= and =y= have to be the same type for the comparison with =(>)= to work. The correct type signature is =Ord a => a -> a -> b=.
+
+3.
+  #+begin_src haskell
+  functionS :: (a, b) -> b
+  functionS (a, b) = b
+  #+end_src
+
+** Given the type, write a function
+1. See =./funcForType.hs=.
+
+** Fix it
+1. See =./fixSing.hs=.
+3. [@3] See =./arith3Broken.hs=.
+
+** Type-kwon-do
+See =./typeKwonDo.hs=.
