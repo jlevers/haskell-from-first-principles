@@ -1,0 +1,65 @@
+#+TITLE: Chapter 4
+#+AUTHOR: Jesse Evers
+
+* Mood Swing
+
+Data type that the following answers are related to:
+=data Mood = Blah | Woot deriving Show=
+
+1. The type constructor is =Mood=.
+2. The possible values for =Mood= are =Blah= or =Woot=.
+3. =Woot= is a data constructor for =Mood=, not a type. The function would have to be =Mood -> Mood=.
+4. 
+   #+begin_src haskell
+     data Mood = Blah | Woot deriving Show
+
+     changeMood Blah = Woot
+     changeMood    _ = Blah
+   #+end_src
+
+* Find the Mistakes
+
+1. =not True && true= is incorrect because =true= should be capitalized. It should be =not True && True=.
+2. =not (x = 6)= is incorrect because a double equals sign is used for comparison. It should be =not (x == 6)=.
+3. =(1 * 2) > 5= is valid.
+4. =[Merry] > [Happy]= is invalid because =Merry= and =Happy= are not in scope.
+5. =[1, 2, 3] ++ "look at me!"= is invalid because it attempts to concatenate two different types, even though they're both lists (which I think means they share the =Ord= typeclass).
+
+* Chapter Exercises
+The following code is relevant to these exercises:
+#+begin_src haskell
+awesome = ["Papuchon", "curry", ":)"]
+also = ["Quake", "The Simons"]
+allAwesome = [awesome, also]
+#+end_src
+
+1. =length :: [a] -> Integer= (this isn't quite right but the idea is correct)
+2. 
+   1. 5
+   2. 3
+   3. 2
+   4. 5
+3. =6 / 3= will work, =6 / length [1, 2, 3]= will not because =length= returns an =Int=, which does not have an instance of the =Fractional= typeclass expected by =/=.
+4. =6 `div` length [1, 2, 3]= will work because =div= expects its inputs to have an instance of the =Integral= typeclass instead of =Fractional=.
+5. Expression is of =Bool= type, and it will evaluate to =True=.
+6. =Bool=, =False=.
+7. 
+   - =length allAwesome == 2= reduces to =True=. Both sides of the comparison are =Bool=.
+   - =length [1, 'a', 3, 'b']= will error, because a list's elements must all be the same type.
+   - =length allAwesome + length awesome= will reduce to 5, because the return type of both calls to =length= will be =Int=, and =Int= implements =Num=, which can be added.
+   - =(8 == 8) && ('b' < 'a')= will evaluate to =False=. Both parenthesized expressions evaluate to =Bool= values, and =&&= takes two =Bool= values as inputs.
+   - =(8 == 8) && 9= will error, because =9= is not a =Bool= and cannot be reduced.
+8. See =./ch4.hs=.
+9. Ditto.
+10. Ditto.
+
+** Correcting syntax
+1. See =./ch4.hs=.
+2. Ditto.
+3. Ditto.
+
+** Match the function names to their types
+1. (c)
+2. (b)
+3. (a)
+4. (d)
