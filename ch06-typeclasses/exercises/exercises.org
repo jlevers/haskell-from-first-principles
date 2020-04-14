@@ -1,0 +1,63 @@
+#+TITLE: Chapter 6
+#+AUTHOR: Jesse Evers
+
+* Equal instances
+See =./eqInstances.hs=.
+
+* Will They Work?
+1. This will work, and return 5. =Int= has an instance of the =Num= typeclass, which has an instance of =Ord=.
+2. =compare (3 * 4) (3 * 5)= will return =LT=, because =3 * 4= is less than =3 * 5=, and both computation results will be of type =Num a => a=, which has an instance of =Ord=.
+3. =compare "Julie" True= will error, because while ="Julie"= and =True= both have instances of =Ord=, they're of different concrete types, so they can't be compared with =compare=.
+4. =(5 + 3) > (3 + 6) will return =False=. Again, both computations result in =Num a => a=, which has an instance of =Ord=.
+
+* Chapter Exercises
+** Multiple choice
+1. (c)
+2. (b)
+3. (a)
+4. (c)
+5. (a)
+
+** Does it typecheck?
+1. See =./doesItTypecheck.hs=.
+
+** Given a datatype declaration, what can we do?
+
+Based on this:
+#+begin_src haskell
+data Rocks =
+  Rocks String deriving (Eq, Show)
+
+data Yeah =
+  Yeah Bool deriving (Eq, Show)
+
+data Papu =
+  Papu Rocks Yeah
+  deriving (Eq, Show)
+#+end_src
+
+Which of these will typecheck?
+
+1. =phew = Papu "chases" True=
+   This will not typecheck because =Rocks= and =Yeah= aren't just aliases for =String= and =Bool=, they start with the additional data =Rocks= or =Yeah= before the =String= and =Bool= parts of their type, respectively.
+
+2. =truth = Papu (Rocks "chomskydoz") (Yeah True)=
+   This will typecheck, because it fixes the problem mentioned above.
+
+3. This should typecheck, because =Papu=, =Rocks=, and =Yeah= all derive =Eq= and so can be compared.
+   #+begin_src haskell
+     equalityForall :: Papu -> Papu -> Bool
+     equalityForall p p' = p == p'
+   #+end_src
+
+4. This will not typecheck, because none of =Papu=, =Rocks=, or =Yeah= have an instance of =Ord= and so cannot be compared in an ordinal fashion.
+   #+begin_src haskell
+     comparePapus :: Papu -> Papu -> Bool
+     comparePapus p p' = p > p'
+   #+end_src
+
+** Match the types
+See =./matchTheTypes.hs=.
+
+** Type-Kwon-Do Two
+See =./typeKwonDo2.hs=.
