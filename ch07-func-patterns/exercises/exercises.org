@@ -1,0 +1,86 @@
+#+TITLE: Chapter 7
+#+AUTHOR: Jesse Evers
+
+* Grab Bag
+1. They are all equivalent.
+2. Given that =mTh :: Num a => a -> a -> a -> a=, =mTh 3= is =Num a => a -> a -> a=, because it has only been applied to a single function. =3= will be kept in its most general possible type (=Num a => a=) until it has to be evaluated against the other two arguments.
+3. 
+   1. 
+      #+begin_src haskell
+        addOneIfOdd n = case odd n of
+          True -> f n
+          False -> n
+          where f = \x -> x + 1
+      #+end_src
+   2. 
+      #+begin_src haskell
+        addFive = \x -> \y -> (if x > y then y else x) + 5
+      #+end_src
+   3. 
+      #+begin_src haskell
+        mflip f x y = f y x
+      #+end_src
+
+* Variety Pack
+1. a) =k :: (a, b) -> a=
+   b) =k2 :: String=, which is a different type from =k1= or =k3=, both of which are =Num a => a=.
+   c) =k1= and =k2=.
+2. 
+   #+begin_src haskell
+     f :: (a, b, c)
+       -> (d, e, f)
+       -> ((a, d), (c, f))
+     f (a, _, c) (d, _, f) = ((a, d), (c, f))
+   #+end_src
+
+* Case Practice
+See =./casePractice.hs=.
+
+* Artful Dodgy
+
+#+begin_src haskell
+  dodgy :: Num a => a -> a -> a
+  dodgy x y = x + y * 10
+
+  oneIsOne :: Num a => a -> a
+  oneIsOne = dodgy 1
+
+  oneIsTwo :: Num a => a -> a
+  oneIsTwo = (flip dodgy) 2
+#+end_src
+
+1. =dodgy 1 0= evaluates to =1=.
+2. =dodgy 1 1= evaluates to =11=.
+3. =dodgy 2 2= evaluates to =22=.
+4. =dodgy 1 2= evaluates to =21=.
+5. =dodgy 2 1= evaluates to =12=.
+6. =oneIsOne 1= evaluates to =11=.
+7. =oneIsOne 2= evaluates to =21=.
+8. =oneIsTwo 1= evaluates to =21=.
+9. =oneIsTwo 2= evaluates to =22=.
+10. =oneIsOne 3= evaluates to =31=.
+11. =OneIsTwo 3= evaluates to =23=.
+
+* Guard Duty
+1. You'll always get an 'F', regardless of the input.
+2. No, it will return 'C', because =90 / 100 = 0.9=, which is greater than =0.7=, so the guard matches.
+3. (b)
+4. =pal= can take any list.
+5. =pal :: [a] -> Bool=
+   Wrong. Should be =pal :: Eq a => [a] -> Bool=. Items in the list have to be comparable.
+6. (c)
+7. Any =Num a => a=
+   Wrong. Should be any =(Num a, Ord a) => a=, because the argument has to be comparable to 0.
+8. =numbers :: Num a => a -> a=.
+   Wrong. Should be =(Num a, Ord a, Num p) => a -> p=, because the argument has to be comparable to 0, but there's no reason the return value needs to be ordinal.
+
+* Chapter exercises
+** Multiple choice
+1. (d)
+2. (b)
+3. (d)
+4. (b)
+5. (a)
+
+** Let's write code
+See =./ch07.hs=.
