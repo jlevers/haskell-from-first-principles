@@ -1,0 +1,78 @@
+#+TITLE: Chapter 8
+#+AUTHOR: Jesse EVers
+
+* Intermission: Exercise
+
+#+begin_src haskell
+  applyTimes :: (Eq a, Num a) => a -> (b -> b) -> b -> b
+  applyTimes 0 f b = b
+  applyTimes n f b = f . applyTimes (n-1) f $ b
+
+  incTimes :: (Eq a, Num a) => a -> a -> a
+  incTimes times n = applyTimes times (+1) n
+
+
+  -- Longform version of the evaluation of applyTimes 5 (+1) 5
+  applyTimes 5 (+1) 5
+  (+1) (applyTimes 4 (+1) 5)
+  (+1) ((+1) (applyTimes 3 (+1) 5))
+  (+1) ((+1) ((+1) (applyTimes 2 (+1) 5)))
+  (+1) ((+1) ((+1) ((+1) (applyTimes 1 (+1) 5))))
+  (+1) ((+1) ((+1) ((+1) ((+1) (applyTimes 0 (+1) 5)))))
+  (+1) ((+1) ((+1) ((+1) ((+1) 5))))
+  (+1) ((+1) ((+1) ((+1) 6)))
+  (+1) ((+1) ((+1) 7))
+  (+1) ((+1) 8)
+  (+1) 9
+  10
+#+end_src
+
+
+* Chapter exercises
+** Review of types
+1. (d)
+2. (b)
+3. (d)
+4. (b)
+
+** Reviewing currying
+See =./catty.hs=.
+
+** Recursion
+1. 
+    #+begin_src haskell
+      dividedBy :: Integral a => a -> a -> (a, a)
+      dividedBy num denom = go num denom 0
+        where go n   d count
+               | n < d = (count, n)
+               | otherwise = go (n - d) d (count + 1)
+
+      -- Written out steps for dividedBy 15 2
+      dividedBy 15 2
+      go 15 2 0
+      go 13 2 1
+      go 11 2 2
+      go 9  2 3
+      go 7  2 4
+      go 5  2 5
+      go 3  2 6
+      go 1  2 7
+      (7, 1)
+    #+end_src
+
+2. 
+   #+begin_src haskell :results output
+     sumTo :: (Eq a, Num a) => a -> a
+     sumTo count = go count 0
+       where go n total
+              | n == 0    = total
+              | otherwise = go (n - 1) (total + n) 
+   #+end_src
+
+   #+RESULTS:
+   : <interactive>:14:1-5: error:
+   :     Variable not in scope: sumTo :: a1 -> a1
+   : <interactive>:15:15-16: error:
+   :     Variable not in scope: go :: t -> Integer -> t1
+   : <interactive>:16:3-7: error: parse error on input ‘where’
+   : <interactive>:17:10: error: parse error on input ‘|’
