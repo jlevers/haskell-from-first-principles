@@ -1,0 +1,41 @@
+#+TITLE: Chapter 10
+#+AUTHOR: Jesse Evers
+
+* Understanding folds
+1. (b) and (c)
+2. 
+   #+begin_src haskell
+     foldl (flip (*)) 1 [1..5]
+     -- the evaluation of the above looks like:
+     foldl (flip (*)) 1 [1, 2, 3, 4, 5]
+     foldl (flip (*)) ((flip (*)) 1 1) [2, 3, 4, 5]
+     foldl (flip (*)) ((flip (*)) ((flip (*)) 1 1) 2) [3, 4, 5]
+     foldl (flip (*)) ((flip (*)) ((flip (*)) ((flip (*)) 1 1) 2) 3) [4, 5]
+     foldl (flip (*)) ((flip (*)) ((flip (*)) ((flip (*)) ((flip (*)) 1 1) 2) 3) 4) [5]
+     foldl (flip (*)) ((flip (*)) ((flip (*)) ((flip (*)) ((flip (*)) ((flip (*)) 1 1) 2) 3) 4) 5) []
+
+     (flip (*)) ((flip (*)) ((flip (*)) ((flip (*)) ((flip (*)) 1 1) 2) 3) 4) 5
+     (flip (*)) ((flip (*)) ((flip (*)) ((flip (*)) (1 * 1) 2) 3) 4) 5
+     (flip (*)) ((flip (*)) ((flip (*)) ((flip (*)) 1 2) 3) 4) 5
+     (flip (*)) ((flip (*)) ((flip (*)) (2 * 1) 3) 4) 5
+     (flip (*)) ((flip (*)) ((flip (*)) 2 3) 4) 5
+     (flip (*)) ((flip (*)) (3 * 2) 4) 5
+     (flip (*)) ((flip (*)) 6 4) 5
+     (flip (*)) (4 * 6) 5
+     (flip (*)) 24 5
+     5 * 24
+     120
+   #+end_src
+
+3. (c)
+4. (a)
+5. 
+   1. Should be ~foldr (++) "" ["woot", "WOOT", "woot"]~.
+   2. Should be ~foldr max 'a' "fear is the little death"~.
+   3. Should be ~foldr (&&) True [False, True]~.
+   4. Should be ~foldr (||) False [False, True]~.
+   5. Should be ~foldl (show . (++)) "" [1..5]~.
+   6. Should be ~foldl const 'a' [1..5]~.
+   7. Should be ~foldl const 0 "tacos"~.
+   8. Should be ~foldr (flip const) 0 "burritos"~.
+   9. Should be ~foldr (flip const) 'z' [1..5]~.
